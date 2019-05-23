@@ -34,3 +34,10 @@ PPO + ours
 ```
 python -m coinrun.train_random --run-id myrun --save-interval 1 -lstm 2
 ```
+
+## Test on unseen environments
+
+```
+python -m coinrun.enjoy --test-eval --restore-id myrun -num-eval N -rep K -train_flag 1
+```
+
