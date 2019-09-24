@@ -292,7 +292,14 @@ class RandomCnnPolicy(object):
                 return c_a, c_v, self.initial_state, c_neglogp
             else:
                 return a, v, self.initial_state, neglogp
-        
+            
+        def value_with_clean(flag, ob, *_args, **_kwargs):
+            v, c_v = sess.run([vf, clean_vf], {X:ob})
+            if flag:
+                return c_v
+            else:
+                return v
+            
         self.X = X
         self.H = h
         self.CH = clean_h
@@ -302,7 +309,8 @@ class RandomCnnPolicy(object):
         self.step = step
         self.value = value
         self.step_with_clean = step_with_clean
-
+        self.value_with_clean = value_with_clean
+        
 def get_policy():
     use_lstm = Config.USE_LSTM
     
