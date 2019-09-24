@@ -195,7 +195,7 @@ class Model(object):
         self.train_model = train_model
         self.act_model = act_model
         self.step = act_model.step
-        self.value = act_model.value
+        self.value = act_model.value_with_clean
         self.initial_state = act_model.initial_state
         self.save = save
         self.load = load
@@ -249,7 +249,7 @@ class Runner(AbstractEnvRunner):
         mb_values = np.asarray(mb_values, dtype=np.float32)
         mb_neglogpacs = np.asarray(mb_neglogpacs, dtype=np.float32)
         mb_dones = np.asarray(mb_dones, dtype=np.bool)
-        last_values = self.model.value(self.obs, self.states, self.dones)
+        last_values = self.model.value(clean_flag, self.obs, self.states, self.dones)
 
         # discount/bootstrap off value fn
         mb_returns = np.zeros_like(mb_rewards)
