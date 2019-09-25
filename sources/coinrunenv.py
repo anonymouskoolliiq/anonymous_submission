@@ -223,8 +223,6 @@ class CoinRunVecEnv(VecEnv):
             obs_frames = self.use_inversion(obs_frames)
         if Config.USE_COLOR_TRANSFORM:
             obs_frames = self.use_color_transform(obs_frames)
-        if Config.USE_BLACK_WHITE:
-            obs_frames = np.mean(obs_frames, axis=-1).astype(np.uint8)[...,None]
             
         return obs_frames, self.buf_rew, self.buf_done, self.dummy_info
     
