@@ -30,6 +30,11 @@ Vanilar PPO + L2
 python -m coinrun.train_agent --run-id myrun --save-interval 1 -l2 0.0001
 ```
 
+Vanilar PPO + Grayout
+```
+python -m coinrun.train_agent --run-id myrun --save-interval 1 -ubw 1
+```
+
 PPO + ours
 ```
 python -m coinrun.train_random --run-id myrun --save-interval 1 -lstm 2
