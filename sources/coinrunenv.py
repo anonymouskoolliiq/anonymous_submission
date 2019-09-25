@@ -164,7 +164,7 @@ class CoinRunVecEnv(VecEnv):
             self.inv_prob = [np.random.rand() for _ in range(num_envs)]    
         if Config.USE_COLOR_TRANSFORM:
             self.colorjitter \
-            = [transforms.ColorJitter(brightness=.9, contrast=.9, saturation=.9, hue=.5) for _ in range(num_envs)]
+            = [transforms.ColorJitter(brightness=.5, contrast=.5, saturation=.5) for _ in range(num_envs)]
             
         super().__init__(
             num_envs=num_envs,
