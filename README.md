@@ -35,6 +35,18 @@ Vanilar PPO + Grayout
 python -m coinrun.train_agent --run-id myrun --save-interval 1 -ubw 1
 ```
 
+
+Vanilar PPO + Inversion
+```
+python -m coinrun.train_agent --run-id myrun --save-interval 1 -ui 1
+```
+
+
+Vanilar PPO + Color Jitter
+```
+python -m coinrun.train_agent --run-id myrun --save-interval 1 -uct 1
+```
+
 PPO + ours
 ```
 python -m coinrun.train_random --run-id myrun --save-interval 1 -lstm 2
