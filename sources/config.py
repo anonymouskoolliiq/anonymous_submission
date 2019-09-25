@@ -124,6 +124,9 @@ class ConfigSingle(object):
         random_keys.append(('fm_coeff', 'fm_coeff', float, 0.002))
         random_keys.append(('real_thres', 'real_thres', float, 0.9))
         
+        random_keys.append(('ui', 'use_inversion', int, 0))
+        random_keys.append(('uct', 'use_color_transform', int, 0))
+        
         self.RES_KEYS = []
 
         for tk in type_keys:
