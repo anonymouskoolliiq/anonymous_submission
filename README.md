@@ -10,7 +10,7 @@ Vanilar PPO
 python -m coinrun.train_agent --run-id myrun --save-interval 1
 ```
 
-Vanilar PPO + Data Augmentation
+Vanilar PPO + CutOut
 ```
 python -m coinrun.train_agent --run-id myrun --save-interval 1 -uda 1
 ```
