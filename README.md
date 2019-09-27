@@ -1,7 +1,7 @@
 ## Preliminaries
 This code is based on [CoinRun](https://github.com/openai/coinrun) platform. 
 After installing all packages in [CoinRun](https://github.com/openai/coinrun), 
-replace `coninrun.cpp`, `policies.py`, `config.py`, `train_random.py`, `random_ppo2.py` and `coinrunenv.py` with ours.
+replace `coinrun.cpp`, `coinrunenv.py`, `config.py`, `policies.py`, `ppo2.py`, `random_ppo2.py`, and `train_random.py` with ours.
 
 ## Training PPO agents
 
