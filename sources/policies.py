@@ -146,7 +146,39 @@ class CnnPolicy(object):
         X, processed_x = observation_input(ob_space, nbatch)
 
         with tf.variable_scope("model", reuse=tf.AUTO_REUSE):
-            h, self.dropout_assign_ops = choose_cnn(processed_x)
+            #
+            if Config.USE_COLOR_TRANSFORM:
+                out_shape = processed_x.get_shape().as_list()
+                
+                mask_vbox = tf.Variable(tf.zeros_like(processed_x, dtype=bool), trainable=False)
+                rh = .2 # hard-coded velocity box size
+                # mh = tf.cast(tf.cast(out_shape[1], dtype=tf.float32)*rh, dtype=tf.int32)
+                mh = int(out_shape[1]*rh)
+                mw = mh*2
+                mask_vbox = mask_vbox[:,:mh,:mw].assign(tf.ones([out_shape[0], mh, mw, out_shape[-1]], dtype=bool))
+                masked = tf.where(mask_vbox, x=tf.zeros_like(processed_x), y=processed_x)
+                
+                # tf.image.adjust_brightness vs. ImageEnhance.Brightness
+                # tf version is additive while PIL version is multiplicative
+                delta_brightness = tf.Variable(tf.random_uniform([], -.5, .5), trainable=False, name='randprocess_brightness')
+                # tf.image.adjust_contrast vs. PIL.ImageEnhance.Contrast
+                delta_contrast   = tf.Variable(tf.random_uniform([], .5, 1.5), trainable=False, name='randprocess_contrast')
+                # tf.image.adjust_saturation vs. PIL.ImageEnhance.Color
+                delta_saturation = tf.Variable(tf.random_uniform([], .5, 1.5), trainable=False, name='randprocess_saturation')
+
+                processed_x1 = tf.image.adjust_brightness(masked, delta_brightness)
+                processed_x1 = tf.clip_by_value(processed_x1, 0., 255.)
+                processed_x1 = tf.where(mask_vbox, x=masked, y=processed_x1)
+                processed_x2 = tf.image.adjust_contrast(processed_x1, delta_contrast)
+                processed_x2 = tf.clip_by_value(processed_x2, 0., 255.)
+                processed_x2 = tf.where(mask_vbox, x=masked, y=processed_x2)
+                processed_x3 = tf.image.adjust_saturation(processed_x2, delta_saturation)
+                processed_x3 = tf.clip_by_value(processed_x3, 0., 255.)
+                processed_x3 = tf.where(mask_vbox, x=processed_x, y=processed_x3)
+            else:
+                processed_x3 = processed_x
+            #
+            h, self.dropout_assign_ops = choose_cnn(processed_x3)
             vf = fc(h, 'v', 1)[:,0]
             self.pd, self.pi = self.pdtype.pdfromlatent(h, init_scale=0.01)
 

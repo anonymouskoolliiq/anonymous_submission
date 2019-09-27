@@ -162,9 +162,6 @@ class CoinRunVecEnv(VecEnv):
         
         if Config.USE_INVERSION:
             self.inv_prob = [np.random.rand() for _ in range(num_envs)]    
-        if Config.USE_COLOR_TRANSFORM:
-            self.colorjitter \
-            = [transforms.ColorJitter(brightness=.5, contrast=.5, saturation=.5) for _ in range(num_envs)]
             
         super().__init__(
             num_envs=num_envs,
@@ -221,8 +218,6 @@ class CoinRunVecEnv(VecEnv):
             obs_frames = np.mean(obs_frames, axis=-1).astype(np.uint8)[...,None]
         if Config.USE_INVERSION:
             obs_frames = self.use_inversion(obs_frames)
-        if Config.USE_COLOR_TRANSFORM:
-            obs_frames = self.use_color_transform(obs_frames)
             
         return obs_frames, self.buf_rew, self.buf_done, self.dummy_info
     
@@ -234,15 +229,6 @@ class CoinRunVecEnv(VecEnv):
                 new_ob = 255 - ob
             new_obs.append(new_ob)
         new_obs = np.stack(new_obs)
-        if Config.PAINT_VEL_INFO:
-            rh = .2 # hard-coded velocity box size
-            mh = int(obs.shape[1]*rh)
-            mw = mh*2
-            new_obs[:,:mh,:mw] = obs[:,:mh,:mw]
-        return new_obs
-    
-    def use_color_transform(self, obs):
-        new_obs = np.stack([np.array(self.colorjitter[i](Image.fromarray(ob))) for i, ob in enumerate(obs)])
         if Config.PAINT_VEL_INFO:
             rh = .2 # hard-coded velocity box size
             mh = int(obs.shape[1]*rh)
